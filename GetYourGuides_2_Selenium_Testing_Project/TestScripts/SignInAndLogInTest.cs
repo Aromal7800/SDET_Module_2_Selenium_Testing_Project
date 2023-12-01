@@ -110,23 +110,23 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 try
                 {
                     Assert.That(GetYourGuide.CreateAccountBtn.Displayed);
-                    //  LogTestResult("Create Account Link Test","Create Account Link sucess");
+                     LogTestResult("Create Account Test","Create Account sucess");
                     // Log.Information("Test passed for Create Account");
 
-                    test = extent.CreateTest("Create Account Test - Pass");
-                    test.Pass("Create Account success");
-                    Console.WriteLine("ERCP");
+                 //   test = extent.CreateTest("Create Account Test - Pass");
+                   // test.Pass("Create Account success");
+                   
                 }
                 catch (AssertionException ex)
                 {
                     //Log.Error($"Test failed for Create Account. \n Exception : {ex.Message}");
 
-                    //   LogTestResult("Create Account Link Test","Create Account Link failed");
+                      LogTestResult("Create Account Test","Create Account Test failed");
 
 
-                    test = extent.CreateTest("Create Account Link Test - Fail");
-                    test.Fail("Create Account Link failed");
-                    Console.WriteLine("ERCF");
+                    //test = extent.CreateTest("Create Account Link Test - Fail");
+                   // test.Fail("Create Account Link failed");
+                  
                 }
             }
 
@@ -221,23 +221,23 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 try
                 {
                     Assert.True(GetYourGuide.WelcomeBack.Text == "Welcome back!");
-                    //  LogTestResult("Create Account Link Test","Create Account Link sucess");
+                      LogTestResult("Login Test","Login Test sucess");
                     // Log.Information("Test passed for Create Account");
 
-                    test = extent.CreateTest("User Login Test - Pass");
-                    test.Pass("Login Test success");
-                    // Console.WriteLine("ERCP");
+                   // test = extent.CreateTest("User Login Test - Pass");
+                    //test.Pass("Login Test success");
+                    
                 }
                 catch (AssertionException ex)
                 {
                     //Log.Error($"Test failed for Create Account. \n Exception : {ex.Message}");
 
-                    //   LogTestResult("Create Account Link Test","Create Account Link failed");
+                    //   LogTestResult("Login Test","Login Test failed");
 
 
-                    test = extent.CreateTest("User Login Test - Fail");
-                    test.Fail("Login Test failed");
-                    // Console.WriteLine("ERCF");
+                   // test = extent.CreateTest("User Login Test - Fail");
+                 //   test.Fail("Login Test failed");
+                    
                 }
             }
         }

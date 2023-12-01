@@ -29,7 +29,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         [FindsBy(How = How.XPath, Using = "//input[@title=\"Select date\" and @class='ba-input__label-text']")]
         public IWebElement? SelectDateBtn { get; set; }
 
-        [FindsBy(How = How.XPath, Using = "//span[@data-date-value='2023-12-31']")]
+        [FindsBy(How = How.XPath, Using = "//span[@data-date-value='2024-02-20']")]
         public IWebElement? DateBtn { get; set; }
         
         [FindsBy(How = How.XPath, Using = "//button[contains(@class,'gtm-trigger__adp-check-availability-btn')]")]
@@ -55,6 +55,42 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         [FindsBy(How = How.ClassName, Using = "c-input__field")]
         public IWebElement? ReviewsSearch { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//button[@data-test-id='new-list-modal']")]
+        public IWebElement? CreateWishList { get; set; }
+        [FindsBy(How = How.XPath, Using = "//input[@data-test-id='list-wishlist-title']")]
+        public IWebElement? AddNewWishListName { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//button[@data-test-id='list-wishlist-submit']")]
+        public IWebElement? WishListSubmitBtn { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//span[@data-test-id='wishlist-header']")]
+        public IWebElement? NavWishListBtn { get; set; }
+
+        public Wishlist ClickNavWishListBtn()
+        {
+            NavWishListBtn.Click();
+            return new Wishlist(driver);
+        }
+        public void ClickSubmitWishList()
+        {
+            WishListSubmitBtn.Click();
+        }
+
+        public void EnterNewWishListName(string WLName)
+        {
+            AddNewWishListName.SendKeys(Keys.Control + "a"); // Select all text
+            AddNewWishListName.SendKeys(Keys.Delete);
+           // AddNewWishListName.Clear();
+            AddNewWishListName.SendKeys(WLName);
+        }
+        public void CLickCreateWishList()
+        {
+            CreateWishList.Click();
+        }
+        public void ClickWishListBtn()
+        {
+            WishListBtn.Click();
+        }
        
         public void ClickAdultBtn()
         {

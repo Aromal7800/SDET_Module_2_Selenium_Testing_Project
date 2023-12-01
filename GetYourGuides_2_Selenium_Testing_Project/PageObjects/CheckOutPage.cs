@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using System;
 using System.Collections.Generic;
@@ -28,15 +29,36 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         [FindsBy(How = How.XPath, Using = "//input[@data-test-id='country-form-select']")]
         public IWebElement CountryCode { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//textarea[contains(@id,'c-textarea-')]")]
+        public IWebElement EnterTextArea { get; set; }
+
         [FindsBy(How = How.XPath, Using = "//button[contains(@class,'standard billing-form__personal-details__form__save')]")]
        public IWebElement CheckOutSaveBtn { get; set; }
 
         [FindsBy(How = How.ClassName, Using = "loading-button__label")]
         public IWebElement NextPaymentDetailsBtn { get; set; }
+      
+        public PaymentsPage ClickNextPaymentDetails()
+        {
+            NextPaymentDetailsBtn.Click();
+            return new PaymentsPage(driver);
+        }
 
 
+        public void selectCountry()
+        {
+            SelectElement selectElement = new SelectElement(CountryCode);
+            selectElement.SelectByText("Germany (+49)");
+        }
+        public void CheckOutNumber(string number)
+        {
+            CheckOutPhone.SendKeys(number);
+        }
 
+        public void SentText(string textInput)
+        {
+            EnterTextArea.SendKeys(textInput);
+        }
         
-
     }
 }

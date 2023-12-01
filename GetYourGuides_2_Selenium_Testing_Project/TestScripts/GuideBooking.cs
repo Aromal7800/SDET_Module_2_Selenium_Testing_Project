@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Serilog;
+
 namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
 {
     internal class GuideBooking:CoreCodes
@@ -16,10 +18,17 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
         [Test]
         public void BookAGuide()
         {
+            String currdir = Directory.GetParent(@"../../../").FullName;
+            string logfilepath = currdir + "/Logs/log_" + DateTime.Now.ToString("yyyymmdd_HHmmss") + ".txt";
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(logfilepath, rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             GetYourGuideHomePage GetYourGuide = new GetYourGuideHomePage(driver);
             DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
-            fluentWait.Timeout = TimeSpan.FromSeconds(5);
-            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(100);
+            fluentWait.Timeout = TimeSpan.FromSeconds(20);
+            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(1000);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
             GetYourGuide.ProfileBtn = fluentWait.Until(driv => { return GetYourGuide.ProfileBtn.Displayed ? GetYourGuide.ProfileBtn : null; });
             
@@ -37,7 +46,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                  GetYourGuide.ClickSignUpOrLogInBtn();
              }
             
-            string currdir = Directory.GetParent(@"../../../").FullName;
+            
             string? excelFilePath = currdir + "/TestData/InputData.xlsx";
             string? sheetName = "BookGuide";
 
@@ -49,7 +58,9 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 string? logInPassword = excelData?.LogInPassword;
                 string? search = excelData?.Search;
                 string? adultCount = excelData?.AdultCount;
-                
+                string? mobileNumber = excelData?.MobileNumber;
+                string? text = excelData?.Text;
+
                 GetYourGuide.ProfileEmailTextBar = fluentWait.Until(driv =>
                 {
                     return GetYourGuide.ProfileEmailTextBar.Displayed ? GetYourGuide.ProfileEmailTextBar : null;
@@ -76,35 +87,26 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                     GetYourGuide.EnterPassword(logInPassword);
                 }
 
-                GetYourGuide.RemeberMeCheckBox = fluentWait.Until(driv =>
-                {
-                    return GetYourGuide.RemeberMeCheckBox.Displayed ? GetYourGuide.RemeberMeCheckBox : null;
-                });
-                if (GetYourGuide.PasswordBar != null)
-                {
+               
                     GetYourGuide.ClickRememberMeCheckBox();
-                }
-                GetYourGuide.RemeberMeCheckBox = fluentWait.Until(driv =>
-                {
-                    return GetYourGuide.RemeberMeCheckBox.Displayed ? GetYourGuide.RemeberMeCheckBox : null;
-                });
-                if (GetYourGuide.PasswordBar != null)
-                {
-                    GetYourGuide.ClickRememberMeCheckBox();
-                }
-                GetYourGuide.LogInBtn = fluentWait.Until(driv =>
-                {
-                    return GetYourGuide.LogInBtn.Displayed ? GetYourGuide.LogInBtn : null;
-                });
-                if (GetYourGuide.LogInBtn != null)
-                {
-
+               
+               
+              
                     GetYourGuide.ClickLogIn();
+
+                GetYourGuide.SearchBox = fluentWait.Until(driv =>
+                {
+                    return GetYourGuide.SearchBox.Displayed ? GetYourGuide.SearchBox : null;
+                });
+                if (GetYourGuide.SearchBox != null)
+                {
+                    //  Console.WriteLine(password);
+                   
                 }
-                
-                Thread.Sleep(4000);
+
+
                 var searchResultPg = GetYourGuide.SearchItem(search);
-                Thread.Sleep(4000);
+                
                 searchResultPg.FilterToursbtn = fluentWait.Until(driv =>
                 {
                     return searchResultPg.FilterToursbtn.Displayed ? searchResultPg.FilterToursbtn : null;
@@ -152,22 +154,17 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                     searchResultPg.ClickLocalActivity();
 
                 }
-                searchResultPg.SubmitFilterTours = fluentWait.Until(driv =>
-                {
-                    return searchResultPg.SubmitFilterTours.Displayed ? searchResultPg.SubmitFilterTours : null;
-                });
-                if (searchResultPg.SubmitFilterTours != null)
-                {
+               
 
                     ScrollIntoView(driver, searchResultPg.SubmitFilterTours);
                     searchResultPg.ClickSubmit();
 
-                }
+               
 
 
 
 
-                Thread.Sleep(5000);
+
 
                 searchResultPg.SelectTour = fluentWait.Until(driv =>
                 {
@@ -177,16 +174,17 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 {
 
                     ScrollIntoView(driver, searchResultPg.SelectTour);
-                    
+
 
                 }
                 Thread.Sleep(3000);
                 var selectedProductpg = searchResultPg.SelectTourPage();
                 // ScrollIntoView(driver, searchResultPg.SelectTour);
-
                 Thread.Sleep(3000);
 
-                ScrollIntoView(driver, selectedProductpg.AdultBtn);
+
+
+
 
                 selectedProductpg.AdultBtn = fluentWait.Until(driv =>
                 {
@@ -194,7 +192,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 });
                 if (selectedProductpg.AdultBtn != null)
                 {
-
+                    ScrollIntoView(driver, selectedProductpg.AdultBtn);
                     selectedProductpg.ClickAdultBtn();
 
                 }
@@ -208,7 +206,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                     selectedProductpg.EnterAdultCount(adultCount);
 
                 }
-                Thread.Sleep(3000);
+
 
                 selectedProductpg.SelectDateBtn = fluentWait.Until(driv =>
                 {
@@ -257,24 +255,27 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 if (selectedProductpg.BookNowBtn != null)
                 {
                     ScrollIntoView(driver, selectedProductpg.BookNowBtn);
-                    
+
 
                 }
-                var ShoppingCart= selectedProductpg.ClickBookNow();
+                var ShoppingCart = selectedProductpg.ClickBookNow();
+                
+                while (driver.Url.Contains("https://www.getyourguide.com/checkout/activity"))
+                {
 
-/*
-                ShoppingCart.PickUpLocation = fluentWait.Until(driv =>
-                {
-                    return ShoppingCart.PickUpLocation.Displayed ? ShoppingCart.PickUpLocation : null;
-                });
-                if (ShoppingCart.PickUpLocation != null)
-                {
-                    ScrollIntoView(driver, ShoppingCart.PickUpLocation);
-                    ShoppingCart.ClickDoNotPickUp();
+                    ShoppingCart.PickUpLocation = fluentWait.Until(driv =>
+                    {
+                        return ShoppingCart.PickUpLocation.Displayed ? ShoppingCart.PickUpLocation : null;
+                    });
+                    if (ShoppingCart.PickUpLocation != null)
+                    {
+                        ScrollIntoView(driver, ShoppingCart.PickUpLocation);
+                        ShoppingCart.ClickDoNotPickUp();
+
+                    }
 
                 }
 
-          */     
 
                 ShoppingCart.GoToCheckOut = fluentWait.Until(driv =>
                 {
@@ -286,8 +287,70 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
 
 
                 }
-                Thread.Sleep(3000);
-               var checkOutPage= ShoppingCart.ClickCheckOutBtn();  
+            
+
+               var checkOutPage= ShoppingCart.ClickCheckOutBtn();
+                
+
+                checkOutPage.CheckOutPhone = fluentWait.Until(driv =>
+                {
+                    return checkOutPage.CheckOutPhone.Displayed ? checkOutPage.CheckOutPhone : null;
+                });
+                if (checkOutPage.CheckOutPhone != null)
+                {
+                    ScrollIntoView(driver, checkOutPage.CheckOutPhone);
+
+                    checkOutPage.CheckOutNumber(mobileNumber);
+                }
+                
+
+                checkOutPage.EnterTextArea = fluentWait.Until(driv =>
+                {
+                    return checkOutPage.EnterTextArea.Displayed ? checkOutPage.EnterTextArea : null;
+                });
+                if (checkOutPage.EnterTextArea != null)
+                {
+                    ScrollIntoView(driver, checkOutPage.EnterTextArea);
+
+                    checkOutPage.SentText(text);
+                }
+
+               
+                checkOutPage.NextPaymentDetailsBtn = fluentWait.Until(driv =>
+                {
+                    return checkOutPage.NextPaymentDetailsBtn.Displayed ? checkOutPage.NextPaymentDetailsBtn : null;
+                });
+                if (checkOutPage.NextPaymentDetailsBtn != null)
+                {
+                    ScrollIntoView(driver, checkOutPage.NextPaymentDetailsBtn);
+
+                    
+                }
+                try
+                {
+                    Assert.True(driver.Url.Contains("personal"));
+                    LogTestResult("Booking Test - Pass", "Booking Test success");
+                    // Log.Information("Booking Test success");
+
+                    test = extent.CreateTest("Booking Test - Pass");
+                      test.Pass("Booking Test success");
+                    // Console.WriteLine("ERCP");
+                }
+                catch (AssertionException ex)
+                {
+                    //Log.Error($"Test failed for Create Account. \n Exception : {ex.Message}");
+
+                    LogTestResult("Booking Test - Fail", "Booking Test failed");
+
+
+                     test = extent.CreateTest("Booking Test - Fail");
+                    test.Fail("Booking Test failed");
+                    // Console.WriteLine("ERCF");
+                }
+
+                var paymentsPage= checkOutPage.ClickNextPaymentDetails();
+
+               
             }
         }
     }

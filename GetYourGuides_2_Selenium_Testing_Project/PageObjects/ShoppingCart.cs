@@ -19,7 +19,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         //button[@data-test-id='checkout-button']
 
 
-        [FindsBy(How = How.XPath, Using = "//label[@for='booking-level-item-RCDK3CUF-booking_pickup_location-0-later']")]
+        [FindsBy(How = How.XPath, Using = "//label[contains(@for,'booking_pickup_location-0-later')]")]
         public IWebElement PickUpLocation {  get; set; }
         [FindsBy(How=How.XPath,Using = "//button[@data-test-id='checkout-next-button']")]
         public IWebElement GoToCheckOut { get; set; }
@@ -27,8 +27,8 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
        public CheckOutPage ClickCheckOutBtn()
         {
             GoToCheckOut.Click();
-            List<string> Windows = driver.WindowHandles.ToList();
-            driver.SwitchTo().Window(Windows[1]);
+           // List<string> Windows = driver.WindowHandles.ToList();
+            //driver.SwitchTo().Window(Windows[1]);
             return new CheckOutPage(driver);
         }
 

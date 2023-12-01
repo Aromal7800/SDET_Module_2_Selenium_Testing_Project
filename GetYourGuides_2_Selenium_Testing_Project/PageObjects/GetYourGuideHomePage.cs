@@ -1,12 +1,15 @@
 ﻿using BunnyCart.Utilities;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
 {
@@ -15,10 +18,10 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         IWebDriver driver;
         public GetYourGuideHomePage(IWebDriver driver)
         {
-            this.driver = driver ?? throw new ArgumentNullException(nameof(driver));    
-            PageFactory.InitElements(driver, this);
+          this.driver = driver ?? throw new ArgumentNullException(nameof(driver));    
+           PageFactory.InitElements(driver, this);
 
-        }
+       }
         [FindsBy(How=How.ClassName,Using = "c-input__field")]
         public IWebElement? SearchBox { get; set; }
       
@@ -69,6 +72,38 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
 
         [FindsBy(How = How.XPath, Using = "//a[contains(@title,'Become a supplier')]")]
         public IWebElement? BecomeASupplier { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//button[@class='gyg-tabs__button gyg-tabs__button--selected']")]
+        public IWebElement SelectSports { get; set; }
+
+
+
+        [FindsBy(How = How.XPath, Using = "//div[@class='vertical-activity-card__content-wrapper'][1]")]
+        public IWebElement FristDisplayedSport { get; set; }
+
+        [FindsBy(How = How.XPath, Using= "//section[@class='login-context-menu__options-list']")] 
+
+        public IWebElement HiddenProfileDropDown { get; set; }  
+       
+
+        public void ProfileBtnDropDownCheck()
+        {
+            Actions actions = new Actions(driver);
+           actions.MoveToElement(ProfileBtn).Perform();
+            
+        }
+
+        public void ClickSelectSports()
+        {
+            SelectSports.Click();
+        }
+        public SelectedProductPage ClickFristDisplayedSport()
+        {
+            FristDisplayedSport.Click();
+            List<string> Windows = driver.WindowHandles.ToList();
+            driver.SwitchTo().Window(Windows[1]);
+            return new SelectedProductPage(driver);
+        }
         public SearchResultPage SearchLocation(string? serachItem)
         {
             SearchBox.SendKeys(serachItem);

@@ -16,7 +16,11 @@ namespace BunnyCart.Utilities
         public string? LogInEmail { get; set; }
         public string? Search {  get; set; }
         public string? AdultCount {  get; set; }
+        public string? Text { get; set; }
+        public string? MobileNumber { get; set; }
 
-        
+        public string? WishListName { get; set; }
+
+
     }
 }

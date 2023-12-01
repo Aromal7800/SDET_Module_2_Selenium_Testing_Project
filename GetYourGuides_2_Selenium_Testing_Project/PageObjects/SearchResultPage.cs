@@ -19,7 +19,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
             this.driver = driver ?? throw new ArgumentNullException(nameof(driver));    
             PageFactory.InitElements(driver, this);
         }
-        [FindsBy(How = How.XPath, Using = "//section[contains(@id,'content grid')]//div[1]")]
+        [FindsBy(How = How.XPath, Using = "//section[contains(@id,'content grid')]//div[4]")]
         public IWebElement? SelectTour { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//button[@data-test-id='trigger-filter-modal']")]
@@ -53,7 +53,6 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
             {
                 ScrollIntoView(driver, SelectTour);
                 SelectTour.Click();
-                Thread.Sleep(5000);
                 List<string> Windows = driver.WindowHandles.ToList();
                 driver.SwitchTo().Window(Windows[1]);
                 

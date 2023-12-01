@@ -1,8 +1,10 @@
 ﻿using AventStack.ExtentReports;
+
 using AventStack.ExtentReports.Reporter;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +92,22 @@ namespace SDET_Module_2_Selenium_Testing_Project
             catch
             {
                 return false;
+            }
+        }
+        protected void LogTestResult(string testName, string result, string errorMessage = null)
+        {
+            Log.Information(result);
+
+            test = extent.CreateTest(testName);
+
+            if (errorMessage == null)
+            {
+                test.Pass(result);
+            }
+            else
+            {
+                Log.Error($"Test failed for {testName}. \n Exception: \n {errorMessage}");
+                test.Fail(result);
             }
         }
         [OneTimeTearDown]

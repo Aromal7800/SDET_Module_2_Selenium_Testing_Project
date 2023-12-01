@@ -19,19 +19,30 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         }
 
         [FindsBy(How = How.XPath, Using = "//input[@name ='holderName']")]
-        IWebElement CardHolderName { get; set; }
+        public IWebElement CardHolderName { get; set; }
 
-        [FindsBy(How = How.XPath, Using = "//input[@placeholder ='1234 5678 9012 3456']")]
-        IWebElement AccNumber { get; set; }
+        [FindsBy(How = How.XPath, Using = "//input[@maxlength ='24']")]
+        public IWebElement AccNumber { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//input[@placeholder ='MM/YY']")]
-        IWebElement ExpiaryDate { get; set; }
+        public IWebElement ExpiaryDate { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//input[@placeholder ='3 digits']")]
-        IWebElement CVVNumber { get; set; }
+        public IWebElement CVVNumber { get; set; }
 
+        public void EnterCVV(string cvv)
+        {
+            CVVNumber.SendKeys(cvv);
+        }
+        public void EnterExpiaryDate(string date)
+        {
+            ExpiaryDate.SendKeys(date);
+        }
 
-
+        public void EnterAccNumber(string AccNo)
+        {
+            AccNumber.SendKeys(AccNo);
+        }
 
 
 

@@ -41,7 +41,10 @@ namespace BunnyCart.Utilities
                                 LogInEmail = GetValueOrDefault(row, "logInEmail"),
                                 LogInPassword = GetValueOrDefault(row, "logInPassword"),
                                 Search = GetValueOrDefault(row, "search"),
-                                 AdultCount=GetValueOrDefault(row, "adultCount")
+                                 AdultCount = GetValueOrDefault(row, "adultCount"),
+                                 MobileNumber = GetValueOrDefault(row, "mobileNumber"),
+                                 Text = GetValueOrDefault(row, "text"),
+                                WishListName=GetValueOrDefault(row, "wishListName")
                             };
 
                             excelDataList.Add(excelData);
