@@ -19,7 +19,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
             this.driver = driver ?? throw new ArgumentNullException(nameof(driver));    
             PageFactory.InitElements(driver, this);
         }
-        [FindsBy(How = How.XPath, Using = "//section[contains(@id,'content grid')]//div[4]")]
+        [FindsBy(How = How.XPath, Using = "//section[@id='content-grid' and contains(@class,'grid-wrapper')]//div[1]")]
         public IWebElement? SelectTour { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//button[@data-test-id='trigger-filter-modal']")]
@@ -39,26 +39,15 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         public SelectedProductPage SelectTourPage()
         {
 
-            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
-            fluentWait.Timeout = TimeSpan.FromSeconds(5);
-            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(100);
-            fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
-            fluentWait.Message = "Eement Not Found";
-            SelectTour = fluentWait.Until(driv =>
-            {
-
-                return SelectTour.Displayed ? SelectTour : null;
-            });
-            if (SelectTour != null)
-            {
-                ScrollIntoView(driver, SelectTour);
                 SelectTour.Click();
+              
+
                 List<string> Windows = driver.WindowHandles.ToList();
                 driver.SwitchTo().Window(Windows[1]);
                 
                 return new SelectedProductPage(driver);
-            }
-            return new SelectedProductPage(driver);
+            
+          
         }
 
         public void ClickFilter()
@@ -81,11 +70,6 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         {
             SubmitFilterTours.Click();
         }
-        public static void ScrollIntoView(IWebDriver driver, IWebElement element)
-        {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
-        }
-
+       
     }
 }

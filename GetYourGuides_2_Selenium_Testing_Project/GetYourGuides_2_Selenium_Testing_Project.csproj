@@ -8,6 +8,12 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="NewFolder\**" />
+  </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="DotNetSeleniumExtras.PageObjects" Version="3.11.0" />
 		<PackageReference Include="DotNetSeleniumExtras.PageObjects.Core" Version="4.14.1" />
@@ -36,7 +42,7 @@
 	<ItemGroup>
 		<Folder Include="ExtentReports\" />
 		<Folder Include="Logs\" />
-		<Folder Include="NewFolder\" />
+		<Folder Include="Screenshots\" />
 		<Folder Include="Logs\" />
 		<Folder Include="TestData\" />
 	</ItemGroup>

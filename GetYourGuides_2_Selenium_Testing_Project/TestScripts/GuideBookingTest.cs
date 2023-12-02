@@ -13,9 +13,11 @@ using Serilog;
 
 namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
 {
-    internal class GuideBooking:CoreCodes
+    internal class GuideBookingTest:CoreCodes
     {
         [Test]
+        [Order(1)]
+        [Category("E2E")]
         public void BookAGuide()
         {
             String currdir = Directory.GetParent(@"../../../").FullName;
@@ -100,11 +102,8 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 });
                 if (GetYourGuide.SearchBox != null)
                 {
-                    //  Console.WriteLine(password);
                    
                 }
-
-
                 var searchResultPg = GetYourGuide.SearchItem(search);
                 
                 searchResultPg.FilterToursbtn = fluentWait.Until(driv =>
@@ -153,18 +152,9 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                     ScrollIntoView(driver, searchResultPg.LocalActivity);
                     searchResultPg.ClickLocalActivity();
 
-                }
-               
-
+                }                         
                     ScrollIntoView(driver, searchResultPg.SubmitFilterTours);
                     searchResultPg.ClickSubmit();
-
-               
-
-
-
-
-
 
                 searchResultPg.SelectTour = fluentWait.Until(driv =>
                 {
@@ -174,18 +164,11 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 {
 
                     ScrollIntoView(driver, searchResultPg.SelectTour);
-
-
                 }
-                Thread.Sleep(3000);
+              //  Thread.Sleep(3000);
                 var selectedProductpg = searchResultPg.SelectTourPage();
                 // ScrollIntoView(driver, searchResultPg.SelectTour);
-                Thread.Sleep(3000);
-
-
-
-
-
+               // Thread.Sleep(3000);
                 selectedProductpg.AdultBtn = fluentWait.Until(driv =>
                 {
                     return selectedProductpg.AdultBtn.Displayed ? selectedProductpg.AdultBtn : null;
@@ -255,8 +238,6 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 if (selectedProductpg.BookNowBtn != null)
                 {
                     ScrollIntoView(driver, selectedProductpg.BookNowBtn);
-
-
                 }
                 var ShoppingCart = selectedProductpg.ClickBookNow();
                 
@@ -271,12 +252,8 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                     {
                         ScrollIntoView(driver, ShoppingCart.PickUpLocation);
                         ShoppingCart.ClickDoNotPickUp();
-
                     }
-
                 }
-
-
                 ShoppingCart.GoToCheckOut = fluentWait.Until(driv =>
                 {
                     return ShoppingCart.GoToCheckOut.Displayed ? ShoppingCart.GoToCheckOut : null;
@@ -284,13 +261,8 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 if (ShoppingCart.GoToCheckOut != null)
                 {
                     ScrollIntoView(driver, ShoppingCart.GoToCheckOut);
-
-
                 }
-            
-
                var checkOutPage= ShoppingCart.ClickCheckOutBtn();
-                
 
                 checkOutPage.CheckOutPhone = fluentWait.Until(driv =>
                 {
@@ -316,36 +288,21 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                 }
 
                
-                checkOutPage.NextPaymentDetailsBtn = fluentWait.Until(driv =>
-                {
-                    return checkOutPage.NextPaymentDetailsBtn.Displayed ? checkOutPage.NextPaymentDetailsBtn : null;
-                });
-                if (checkOutPage.NextPaymentDetailsBtn != null)
-                {
-                    ScrollIntoView(driver, checkOutPage.NextPaymentDetailsBtn);
+             
+                ScrollIntoView(driver, checkOutPage.NextPaymentDetailsBtn);   
+                
+                TakeScreenShot();
 
-                    
-                }
                 try
                 {
                     Assert.True(driver.Url.Contains("personal"));
                     LogTestResult("Booking Test - Pass", "Booking Test success");
-                    // Log.Information("Booking Test success");
-
-                    test = extent.CreateTest("Booking Test - Pass");
-                      test.Pass("Booking Test success");
-                    // Console.WriteLine("ERCP");
+               
                 }
                 catch (AssertionException ex)
                 {
-                    //Log.Error($"Test failed for Create Account. \n Exception : {ex.Message}");
 
                     LogTestResult("Booking Test - Fail", "Booking Test failed");
-
-
-                     test = extent.CreateTest("Booking Test - Fail");
-                    test.Fail("Booking Test failed");
-                    // Console.WriteLine("ERCF");
                 }
 
                 var paymentsPage= checkOutPage.ClickNextPaymentDetails();

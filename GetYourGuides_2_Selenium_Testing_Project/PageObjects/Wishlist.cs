@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using BunnyCart.Utilities;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using System;
 using System.Collections.Generic;
@@ -21,8 +23,14 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
 
         public bool CheckIfWishListCreated(string WLName)
         {
-            foreach(IWebElement element in WishListElements)
+            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
+            fluentWait.Timeout = TimeSpan.FromSeconds(20);
+            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(1000);
+            fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
+            fluentWait.Message = "Element not found";
+            foreach (IWebElement element in WishListElements)
             {
+
                 if (element.Text == WLName)
                 {
                     return true;

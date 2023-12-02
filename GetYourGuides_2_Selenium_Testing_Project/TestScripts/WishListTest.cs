@@ -16,21 +16,18 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
     internal class WishListTest : CoreCodes
     {
         [Test]
+        [Order(1)]
+        [Category("E2E")]
         public void AddToWishList()
         {
             String currdir = Directory.GetParent(@"../../../").FullName;
-            string logfilepath = currdir + "/Logs/log_" + DateTime.Now.ToString("yyyymmdd_HHmmss") + ".txt";
-
-            Log.Logger = new LoggerConfiguration()
-                    .WriteTo.Console()
-                    .WriteTo.File(logfilepath, rollingInterval: RollingInterval.Day)
-                    .CreateLogger();
+            LogInfo();
             GetYourGuideHomePage GetYourGuide = new GetYourGuideHomePage(driver);
             DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
             fluentWait.Timeout = TimeSpan.FromSeconds(20);
             fluentWait.PollingInterval = TimeSpan.FromMilliseconds(1000);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
-
+            fluentWait.Message = "Element not found";
             GetYourGuide.ProfileBtn = fluentWait.Until(driv => { return GetYourGuide.ProfileBtn.Displayed ? GetYourGuide.ProfileBtn : null; });
             if (GetYourGuide.ProfileBtn != null)
             {
@@ -141,42 +138,26 @@ namespace GetYourGuides_2_Selenium_Testing_Project.TestScripts
                     ScrollIntoView(driver, selectedProduct.AddNewWishListName);
                     selectedProduct.EnterNewWishListName(wishListName);
                 }
-                Thread.Sleep(3000);
                selectedProduct.ClickSubmitWishList();
-                var wishListPg = selectedProduct.ClickNavWishListBtn();
 
+                selectedProduct.NavWishListBtn = fluentWait.Until(driv =>
+                {
+                    return selectedProduct.NavWishListBtn.Displayed ? selectedProduct.NavWishListBtn : null;
+                });
+
+                Thread.Sleep(3000);
+                var wishListPg = selectedProduct.ClickNavWishListBtn();
+                TakeScreenShot();
                 try
                 {
                     Assert.True(wishListPg.CheckIfWishListCreated(wishListName));
-                    LogTestResult("Booking Test - Pass", "Booking Test success");
-
+                    LogTestResult("WishList Test - Pass", "WishList Test success");
                 }
                 catch (AssertionException ex)
                 {
-                    //Log.Error($"Test failed for Create Account. \n Exception : {ex.Message}");
-
                     LogTestResult("WishList Test", "WishList Test failed");
-
-
-
                 }
-
-
-
             }
-           
-
-
-            /*
-            selectedProduct.AddNewWishListName = fluentWait.Until(driv => { return selectedProduct.AddNewWishListName.Displayed ? getYourGuide.ProfileBtn : null; });
-
-            if (selectedProduct.AddNewWishListName != null)
-            {
-                ScrollIntoView(driver, selectedProduct.AddNewWishListName);
-                selectedProduct.EnterNewWishListName();
-            }
-
-            */
         }
     }
     }

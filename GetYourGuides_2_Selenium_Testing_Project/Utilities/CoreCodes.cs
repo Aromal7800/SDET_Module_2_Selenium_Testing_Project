@@ -54,7 +54,7 @@ namespace SDET_Module_2_Selenium_Testing_Project
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
         }
-
+      
         [OneTimeSetUp]
         public void InitializeBrowser()
         {
@@ -94,6 +94,18 @@ namespace SDET_Module_2_Selenium_Testing_Project
                 return false;
             }
         }
+
+        public void LogInfo()
+        {
+            String currdir = Directory.GetParent(@"../../../").FullName;
+            string logfilepath = currdir + "/Logs/log_" + DateTime.Now.ToString("yyyymmdd_HHmmss") + ".txt";
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(logfilepath, rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+        }
+
         protected void LogTestResult(string testName, string result, string errorMessage = null)
         {
             Log.Information(result);

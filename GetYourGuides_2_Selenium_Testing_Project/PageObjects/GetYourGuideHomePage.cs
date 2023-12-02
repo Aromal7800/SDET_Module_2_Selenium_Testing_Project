@@ -22,6 +22,24 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
            PageFactory.InitElements(driver, this);
 
        }
+
+        [FindsBy(How = How.XPath, Using = "//div[contains(@class,'page-header__logo-image')]")]
+
+        public IWebElement? ReturnToHomePageLogo { get; set; }
+
+        
+        [FindsBy(How=How.XPath,Using = "//div[@class='c-form-field__error'][1]")]
+        
+        public IWebElement? NameErrorMessage { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//div[@class='c-form-field__error'][2]")]
+
+        public IWebElement? PasswordErrorMessage { get; set; }
+        
+
+        [FindsBy(How = How.XPath, Using = "//div[(@class='authentication')]//div[3]")]
+        public IWebElement? ErrorMessage { get; set; }
+        
         [FindsBy(How=How.ClassName,Using = "c-input__field")]
         public IWebElement? SearchBox { get; set; }
       
@@ -35,6 +53,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
        public IWebElement? LogInOrSignUpBtn { get; set; }
 
         [FindsBy(How = How.Id, Using = "lookupEmail")]
+        [CacheLookup]
         public IWebElement? ProfileEmailTextBar { get; set; }
         
 
@@ -76,21 +95,59 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         [FindsBy(How = How.XPath, Using = "//button[@class='gyg-tabs__button gyg-tabs__button--selected']")]
         public IWebElement SelectSports { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//li[@class='gyg-tabs__pill'][3]")]
+        public IWebElement SelectFood { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//li[@class='gyg-tabs__pill'][3]")]
+        public IWebElement SelectFristRecommendedGuide { get; set; }
+
+        
 
         [FindsBy(How = How.XPath, Using = "//div[@class='vertical-activity-card__content-wrapper'][1]")]
         public IWebElement FristDisplayedSport { get; set; }
 
         [FindsBy(How = How.XPath, Using= "//section[@class='login-context-menu__options-list']")] 
 
-        public IWebElement HiddenProfileDropDown { get; set; }  
-       
+        public IWebElement HiddenProfileDropDown { get; set; }
 
+        
+
+        [FindsBy(How = How.XPath, Using = "//div[@class='vertical-activity-card__top-wrapper']")]
+
+        public IWebElement SelectFristAvailableFood { get; set; }
+
+
+
+        public SelectedProductPage ClickSelectFristFood()
+        {
+            SelectFristAvailableFood.Click();
+            List<string> Windows = driver.WindowHandles.ToList();
+            driver.SwitchTo().Window(Windows[1]);
+            
+            return new SelectedProductPage(driver);
+        }
+
+        public SelectedProductPage ClickFristDisplayedGuideTour()
+        {
+            SelectFristRecommendedGuide.Click();
+            List<string> Windows = driver.WindowHandles.ToList();
+            driver.SwitchTo().Window(Windows[1]);
+            return new SelectedProductPage(driver);
+        }
+
+        public void ClickOnLogoToReturnTOHomePage()
+        {
+            ReturnToHomePageLogo.Click();
+        }
         public void ProfileBtnDropDownCheck()
         {
             Actions actions = new Actions(driver);
            actions.MoveToElement(ProfileBtn).Perform();
             
+        }
+        public void ClickSelectFood()
+        {
+            SelectFood.Click(); 
         }
 
         public void ClickSelectSports()
@@ -161,7 +218,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
             fluentWait.Timeout = TimeSpan.FromSeconds(10);
             fluentWait.PollingInterval = TimeSpan.FromMilliseconds(100);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
-            fluentWait.Message = "Eement Not Found";
+            fluentWait.Message = "Element Not Found";
             SearchBox = fluentWait.Until(driv =>
             {
                 return SearchBox.Displayed ? SearchBox : null;

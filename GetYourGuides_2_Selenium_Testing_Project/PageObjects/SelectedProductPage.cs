@@ -17,6 +17,12 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
             this.driver = driver ?? throw new ArgumentNullException(nameof(driver));
             PageFactory.InitElements(driver, this);
         }
+
+        //div[contains(@class,'page-header__logo-image')]
+
+        [FindsBy(How = How.XPath, Using = "//div[contains(@class,'page-header__logo-image')]")]
+        public IWebElement? GoToHomePageLogo { get; set; }
+
         [FindsBy(How = How.XPath, Using = "//input[contains(@title,'Adult x 1') and @class='ba-input__label-text' ]")]
         public IWebElement? AdultBtn { get; set; }
         [FindsBy(How = How.ClassName, Using = "participants-picker__input")]
@@ -43,7 +49,7 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
         public IWebElement? BookNowBtn { get; set; }
 
 
-        [FindsBy(How = How.XPath, Using = "//div[contains(@class,'photo-gallery__wishlist--icon')]\r\n")]
+        [FindsBy(How = How.XPath, Using = "//div[contains(@class,'photo-gallery__wishlist--icon')]")]
         public IWebElement  ? WishListBtn { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//input[@id='review-filters-rating-5' and @type='checkbox']")]
@@ -65,6 +71,15 @@ namespace GetYourGuides_2_Selenium_Testing_Project.PageObjects
 
         [FindsBy(How = How.XPath, Using = "//span[@data-test-id='wishlist-header']")]
         public IWebElement? NavWishListBtn { get; set; }
+
+        public GetYourGuideHomePage HomePageLogoClick()
+        {
+            GoToHomePageLogo.Click();
+            List<string> Windows = driver.WindowHandles.ToList();
+            driver.SwitchTo().Window(Windows[1]);
+            return new GetYourGuideHomePage(driver);
+        }
+    
 
         public Wishlist ClickNavWishListBtn()
         {
